@@ -1,5 +1,6 @@
 import { tableFromIPC } from "apache-arrow";
 
+// Hardcoded raw bytes (IPC format) for an Arrow table with two columns and three rows.
 const ipcBytes = new Uint8Array([
   255, 255, 255, 255, 192, 0, 0, 0, 16, 0, 0, 0, 0, 0, 10, 0, 16, 0, 14, 0, 7,
   0, 8, 0, 10, 0, 0, 0, 0, 0, 0, 1, 16, 0, 0, 0, 0, 0, 3, 0, 8, 0, 8, 0, 0, 0,
@@ -38,15 +39,23 @@ const ipcBytes = new Uint8Array([
   255, 0, 0, 0, 0,
 ]);
 
+// Load the table.
 const table = tableFromIPC(ipcBytes);
+
+// Iterate over each column...
 for (let i = 0; i < table.numCols; ++i) {
+  // Get the underlying vector.
   const vector = table.getChildAt(i);
 
   try {
+    // Try to convert the vector it to a plain-or-typed array.
     vector.toArray();
 
+    // Which should work fine (it does in the Python equivalent, see `repro.py` using `toPyList` on the same data).
     console.log(`Vector '${table.schema.fields[i].name}' toArray worked fine.`);
   } catch (error) {
+    // But for some reason throws an error on the first column, because `memo.array.set(values, memo.offset);`
+    // goes out of bounds in `toArray` inside of Apache Arrow's `vector.mjs`/`vector.ts` implementation.
     console.log(
       `Vector '${table.schema.fields[i].name}' toArray threw error: '${error}'.`
     );
