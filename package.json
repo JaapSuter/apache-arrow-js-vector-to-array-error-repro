@@ -1,0 +1,15 @@
+{
+  "name": "apache-arrow-js-vector-to-array-error-repro",
+  "version": "1.0.0",
+  "description": "Minimal reproduction of some Apache Arrow code in Javascript that throws an unexpected error (vector.toArray).",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "repro": "node index.js"
+  },
+  "author": "Jaap Suter",
+  "license": "MIT",
+  "dependencies": {
+    "apache-arrow": "^10.0.1"
+  }
+}
