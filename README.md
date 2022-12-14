@@ -1,5 +1,7 @@
 # apache-arrow-js-vector-to-array-error-repro
 
+[edit: a proper fix was contributed by someone else in this PR: https://github.com/apache/arrow/pull/14587, my suggested fix below is incomplete].
+
 Minimal reproduction of some Apache Arrow code in Javascript that throws an unexpected error (vector.toArray).
 
 To reproduce the problem:
